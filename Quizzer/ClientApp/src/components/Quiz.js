@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup } from 'reactstrap';
 import {
-    Card, CardImg, CardTitle, CardText, CardColumns,
+    Spinner, Progress, Jumbotron, Card, CardImg, CardTitle, CardText, CardColumns,
     CardSubtitle, CardBody
 } from 'reactstrap';
 
@@ -25,7 +25,9 @@ export class Quiz extends Component {
 
     static displayName = Quiz.name;
     render() {
-        let content = this.state.loading ? <h1>Loading...</h1> : this.renderQuestions(this.state.questionsToRender[0]);
+        let content = this.state.loading ?
+            <div className="text-center mt-5"><h3 className="mb-5">Loading Questions</h3><Spinner color="primary" /></div>
+            : this.renderQuestions(this.state.questionsToRender[0]);
         return (      
             <div>
                 {content} 
@@ -36,7 +38,9 @@ export class Quiz extends Component {
     renderQuestions(question) {
         return (
             <div>
-                <h2 className="text-center mb-4">{question.text}</h2>
+                <Jumbotron>
+                    <h2 className="text-center mb-4">{question.text}</h2>
+                </Jumbotron>
                 <div className="card-deck">
                     {question.answers.map(answer =>
                     <div className="card bg-info">
@@ -45,7 +49,9 @@ export class Quiz extends Component {
                         </div>
                     </div>
                 )}                  
-                </div> 
+                </div>
+                <div className="text-center mt-2">Questions answered</div>
+                <Progress value="25"/>
             </div>
             );
     }

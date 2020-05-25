@@ -20,7 +20,7 @@ namespace Quizzer.Controllers
 
         //[Authorize]
         [HttpGet]
-        [Route("{Controller}/questions/{difficultyId}")]
+        [Route("{Controller}/questions/{difficultyId:int}")]
         public async Task<IActionResult> Questions(int diffiultyId)
         {
             var result = await context.Questions.Where(q => q.Difficulty == (Difficulty)diffiultyId).ToListAsync();

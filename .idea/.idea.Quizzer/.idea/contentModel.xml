@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\46768\.Rider2019.2\config\extensions" t="IncludeRecursive" />
@@ -50,6 +50,7 @@
           <e p="node_modules\fast-deep-equal" t="IncludeRecursive" />
           <e p="node_modules\fast-json-stable-stringify" t="IncludeRecursive" />
           <e p="node_modules\formik" t="IncludeRecursive" />
+          <e p="node_modules\history" t="IncludeRecursive" />
           <e p="node_modules\html-webpack-plugin" t="IncludeRecursive" />
           <e p="node_modules\jest" t="IncludeRecursive" />
           <e p="node_modules\jest-haste-map" t="IncludeRecursive" />
@@ -73,13 +74,13 @@
           <e p="node_modules\reactstrap" t="IncludeRecursive" />
           <e p="node_modules\realpath-native" t="IncludeRecursive" />
           <e p="node_modules\rimraf" t="IncludeRecursive" />
+          <e p="node_modules\rxjs" t="IncludeRecursive" />
           <e p="node_modules\source-map" t="IncludeRecursive" />
           <e p="node_modules\tiny-warning" t="IncludeRecursive" />
           <e p="node_modules\tslib" t="IncludeRecursive" />
           <e p="node_modules\uri-js" t="IncludeRecursive" />
           <e p="node_modules\worker-farm" t="IncludeRecursive" />
           <e p="node_modules\yup" t="IncludeRecursive" />
-          <e p="package-lock.json" t="Include" />
           <e p="package.json" t="Include" />
           <e p="public" t="Include">
             <e p="favicon.ico" t="Include" />
@@ -91,10 +92,9 @@
             <e p="App.js" t="Include" />
             <e p="App.test.js" t="Include" />
             <e p="components" t="Include">
-              <e p="Counter.js" t="Include" />
-              <e p="FetchData.js" t="Include" />
               <e p="Home.js" t="Include" />
               <e p="Layout.js" t="Include" />
+              <e p="Login.js" t="Include" />
               <e p="NavMenu.css" t="Include" />
               <e p="NavMenu.js" t="Include" />
               <e p="Register.js" t="Include" />
@@ -104,6 +104,7 @@
             <e p="registerServiceWorker.js" t="Include" />
             <e p="services" t="Include">
               <e p="handle-response.js" t="Include" />
+              <e p="helpers.js" t="Include" />
             </e>
           </e>
         </e>
@@ -114,10 +115,15 @@
           <e p="AccountController.cs" t="Include" />
           <e p="WeatherForecastController.cs" t="Include" />
         </e>
+        <e p="Migrations" t="Include">
+          <e p="20200525061320_initial.cs" t="Include" />
+          <e p="20200525061320_initial.Designer.cs" t="Include" />
+          <e p="ContextModelSnapshot.cs" t="Include" />
+        </e>
         <e p="Models" t="Include">
           <e p="Context.cs" t="Include" />
-          <e p="MyModel.cs" t="Include" />
           <e p="User.cs" t="Include" />
+          <e p="UserLoginModel.cs" t="Include" />
           <e p="UserRegistrationModel.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">

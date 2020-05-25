@@ -17,6 +17,5 @@ namespace Quizzer
             base.OnModelCreating(modelBuilder);
 
         }
-        public DbSet<MyModel> Lolboxes { get; set; }
     }
 }

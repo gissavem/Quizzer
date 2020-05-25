@@ -5,17 +5,14 @@ namespace Quizzer
 {
     public class Context : IdentityDbContext<User>
     {
-        public Context(DbContextOptions options)
-            : base(options)
-        {
-        }
- 
+        public Context(DbContextOptions options): base(options){}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());         
             base.OnModelCreating(modelBuilder);
-
         }
+
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
     }
 }

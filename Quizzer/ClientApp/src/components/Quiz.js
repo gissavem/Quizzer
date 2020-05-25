@@ -27,7 +27,7 @@ export class Quiz extends Component {
     render() {
         let content = this.state.loading ?
             <div className="text-center mt-5"><h3 className="mb-5">Loading Questions</h3><Spinner color="primary" /></div>
-            : this.renderQuestions(this.state.questionsToRender[0]);
+            : this.renderQuestions(this.state.questionsToRender[Math.floor(Math.random() * this.state.questionsToRender.length)]);
         return (      
             <div>
                 {content} 
@@ -50,8 +50,10 @@ export class Quiz extends Component {
                     </div>
                 )}                  
                 </div>
-                <div className="text-center mt-2">Questions answered</div>
-                <Progress value="25"/>
+                <div className="text-center mb-5 mx-auto w-50 fixed-bottom">
+                    <span>Questions answered</span>
+                    <Progress value="25"/>
+                </div>
             </div>
             );
     }

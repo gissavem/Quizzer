@@ -27,7 +27,6 @@ namespace Quizzer
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Login([FromBody]UserLoginModel userModel)
         {
-
             var result = await signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, false, false);
             
             if (!result.Succeeded)

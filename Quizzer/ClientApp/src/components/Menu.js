@@ -22,21 +22,21 @@ export class Menu extends Component {
                         <div>
                             <Link className="btn btn-success" to=
                                 {
-                                    { pathname: '/quiz', state: { difficulty: '0' } }
+                                    { pathname: '/quiz', state: { difficulty: 0 } }
                                 }
                             >Easy</Link>
                         </div>
                         <div>
                             <Link className="btn btn-warning" to=
                                 {
-                                    { pathname: '/quiz', state: { difficulty: '1' } }
+                                    { pathname: '/quiz', state: { difficulty: 1 } }
                                 }
                             >Medium</Link>
                         </div>
                         <div>
                             <Link className="btn btn-danger" to=
                                 {
-                                    { pathname: '/quiz', state: { difficulty: '2' } }
+                                    { pathname: '/quiz', state: { difficulty: 2 } }
                                 }
                             >Hard</Link>
                         </div>

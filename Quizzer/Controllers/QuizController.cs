@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Quizzer.Controllers
 {
     [ApiController]
-    public class QuizController : ControllerBase
+    public class QuizController : Controller
     {
         private readonly Context context;
         public QuizController(Context context)
@@ -20,15 +20,22 @@ namespace Quizzer.Controllers
 
         //[Authorize]
         [HttpGet]
-        [Route("{Controller}/questions/{difficultyId}")]
-        public async Task<IActionResult> Questions(int diffiultyId)
+        [Route("[controller]/questions/{id}")]
+        public async Task<IActionResult> Questions(int id)
         {
-            //DIFFICULTYID ÄR ALLTID 0, LÖS
-            var result = await context.Questions.Where(q => q.Difficulty == (Difficulty)diffiultyId).ToListAsync();
+            var result = await context.Questions.Where(q => q.Difficulty == (Difficulty)id).ToListAsync();
             foreach (var question in result)
                 question.Answers = context.Answers.Where(i => i.QuestionId == question.Id).ToList();
             
             return result.Count() < 1 ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
+        }
+
+        [HttpGet]
+        [Route("[controller]/answers/{id}")]
+        public IActionResult Answers(string id)
+        {
+            var result = context.Answers.Single(a => a.Id.ToString() == id).IsCorrect;
+            return new JsonResult(new {IsCorrect = result });
         }
         
         [HttpGet]

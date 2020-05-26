@@ -14,5 +14,6 @@ namespace Quizzer
 
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<Score> Scores { get; set; }
     }
 }

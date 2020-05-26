@@ -89,14 +89,17 @@
           </e>
           <e p="README.md" t="Include" />
           <e p="src" t="Include">
+            <e p="animate.css" t="Include" />
             <e p="App.js" t="Include" />
             <e p="App.test.js" t="Include" />
             <e p="components" t="Include">
               <e p="Home.js" t="Include" />
               <e p="Layout.js" t="Include" />
               <e p="Login.js" t="Include" />
+              <e p="Menu.js" t="Include" />
               <e p="NavMenu.css" t="Include" />
               <e p="NavMenu.js" t="Include" />
+              <e p="Quiz.js" t="Include" />
               <e p="Register.js" t="Include" />
             </e>
             <e p="custom.css" t="Include" />
@@ -113,15 +116,24 @@
         </e>
         <e p="Controllers" t="Include">
           <e p="AccountController.cs" t="Include" />
+          <e p="QuizController.cs" t="Include" />
+          <e p="ScoreController.cs" t="Include" />
           <e p="WeatherForecastController.cs" t="Include" />
         </e>
         <e p="Migrations" t="Include">
-          <e p="20200525061320_initial.cs" t="Include" />
-          <e p="20200525061320_initial.Designer.cs" t="Include" />
+          <e p="20200526115915_init.cs" t="Include" />
+          <e p="20200526115915_init.Designer.cs" t="Include" />
+          <e p="20200526134128_scorescreen.cs" t="Include" />
+          <e p="20200526134128_scorescreen.Designer.cs" t="Include" />
           <e p="ContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">
+          <e p="Answer.cs" t="Include" />
           <e p="Context.cs" t="Include" />
+          <e p="Difficulty.cs" t="Include" />
+          <e p="Question.cs" t="Include" />
+          <e p="Score.cs" t="Include" />
+          <e p="ScoreModel.cs" t="Include" />
           <e p="User.cs" t="Include" />
           <e p="UserLoginModel.cs" t="Include" />
           <e p="UserRegistrationModel.cs" t="Include" />
@@ -143,6 +155,11 @@
           <e p="launchSettings.json" t="Include" />
         </e>
         <e p="Quizzer.csproj" t="IncludeRecursive" />
+        <e p="Seed" t="Include">
+          <e p="Seed.cs" t="Include" />
+          <e p="SeedQuestion.cs" t="Include" />
+          <e p="SeedResponse.cs" t="Include" />
+        </e>
         <e p="Startup.cs" t="Include" />
         <e p="WeatherForecast.cs" t="Include" />
       </e>

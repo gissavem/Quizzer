@@ -48,15 +48,15 @@ namespace Quizzer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "42ba5bcb-19c7-4fb5-afd5-8553fb1fcde6",
-                            ConcurrencyStamp = "d2c76eca-4036-4bff-a2e6-651f78858b22",
+                            Id = "ac4f58fc-de2b-4498-8faa-9469200a9e02",
+                            ConcurrencyStamp = "30ae4c04-6006-4ed9-b603-979e8b7e95fd",
                             Name = "Player",
                             NormalizedName = "PLAYER"
                         },
                         new
                         {
-                            Id = "9e1d7a9d-2201-41e1-a4c5-6e7fdc8cca52",
-                            ConcurrencyStamp = "df3488e1-8aec-46df-aab4-ab004555c026",
+                            Id = "b522a750-4a6d-4715-b14e-74f175e1e27e",
+                            ConcurrencyStamp = "cbe1e2df-4e73-4f4a-934d-abbc6d35d71b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -203,6 +203,29 @@ namespace Quizzer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Quizzer.Score", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DifficultyLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Scores");
                 });
 
             modelBuilder.Entity("Quizzer.User", b =>

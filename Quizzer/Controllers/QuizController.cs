@@ -27,15 +27,34 @@ namespace Quizzer.Controllers
             foreach (var question in result)
                 question.Answers = context.Answers.Where(i => i.QuestionId == question.Id).ToList();
             
-            return result.Count() < 1 ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
+            return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
         }
 
         [HttpGet]
         [Route("[controller]/answers/{id}")]
         public IActionResult Answers(string id)
         {
-            var result = context.Answers.Single(a => a.Id.ToString() == id).IsCorrect;
-            return new JsonResult(new {IsCorrect = result });
+            var result = context.Answers.Single(a => a.Id.ToString() == id);
+
+            if (result.IsCorrect)
+            {
+                return new JsonResult(new
+                {
+                    IsCorrect = result.IsCorrect,
+                    CorrectAnswer = result.Id
+                });
+                
+            }
+            return new JsonResult(new
+            {
+                IsCorrect = result.IsCorrect,
+                CorrectAnswer = context
+                    .Answers
+                    .Single(a => a.QuestionId == result.QuestionId 
+                                 && a.IsCorrect)
+                    .Id
+            });
+            
         }
         
         [HttpGet]

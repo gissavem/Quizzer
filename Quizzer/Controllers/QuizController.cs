@@ -23,7 +23,7 @@ namespace Quizzer.Controllers
         [Route("[controller]/questions/{id}")]
         public async Task<IActionResult> Questions(int id)
         {
-            var result = await context.Questions.Where(q => q.Difficulty == (Difficulty)id).ToListAsync();
+            var result = await context.Questions.Where(q => q.Difficulty == (Difficulty)id).OrderBy(x => Guid.NewGuid()).Take(15).ToListAsync();
             foreach (var question in result)
                 question.Answers = context.Answers.Where(i => i.QuestionId == question.Id).ToList();
             

@@ -46,7 +46,7 @@ export class Quiz extends Component {
                     value={(this.state.questionIndex / this.state.questionsToRender.length) * 100} animated></Progress>
                 </div>
                 <Jumbotron>
-                    <h2 className="text-center mb-4">{question.text}</h2>
+                    <h2 className="text-center mb-2">{question.text}</h2>
                 </Jumbotron>
                 <div className="card-deck">
                     {question.answers.map(answer =>
@@ -57,7 +57,7 @@ export class Quiz extends Component {
                     </div>
                 )}                  
                 </div>
-                <div className="mx-auto text-center mt-2">
+                <div className="mx-auto text-center mt-2 mb-2">
                     <Button id="nextQuestion" color="info" disabled={!this.state.answered} onClick={() => this.nextQuestion()}>Next Question</Button>
                 </div>              
             </div>

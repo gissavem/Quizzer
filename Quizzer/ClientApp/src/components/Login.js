@@ -37,7 +37,7 @@ export class Login extends Component {
                         authenticationService.login(email, password)
                             .then( user=>{
                                 const { from } = this.props.location.state || { from: { pathname: "/" } };
-                                this.props.history.push('/menu');
+                                this.props.history.push(from);
                             }
                             )
                             .catch((error) =>

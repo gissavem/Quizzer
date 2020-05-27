@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +34,24 @@ namespace Quizzer.Controllers
             context.Scores.Add(score);
             await context.SaveChangesAsync();
             return Ok();
+        }
+        [HttpGet]
+        [Authorize]
+        [Route("score")]
+        public IActionResult Score()
+        {
+            var query = from score in context.Scores.ToList()
+                join user in context.Users.ToList() on score.UserId.ToString() equals user.Id
+                select new
+                {
+                    userName = $"{user.FirstName} {user.LastName}",
+                    score = score.Points,
+                    time = score.Time,
+                    difficulty = score.DifficultyLevel.ToString()
+
+                };
+
+            return new JsonResult(query.ToList());
         }
     }
 }

@@ -12,7 +12,9 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
+    <Content Include="ClientApp\src\components\Highscore.js" />
     <Content Include="ClientApp\src\components\Login.js" />
+    <Content Include="ClientApp\src\components\PrivateRoute.js" />
     <Content Include="ClientApp\src\components\Register.js" />
     <Content Include="ClientApp\src\services\handle-response.js" />
     <Content Include="ClientApp\src\services\helpers.js" />

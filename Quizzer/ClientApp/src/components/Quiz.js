@@ -144,7 +144,7 @@ export class Quiz extends Component {
                         <div className="mt-5">
                             <Link className="btn btn-info" to=
                                 {
-                                    { pathname: '/score' }
+                                    { pathname: '/highscore' }
                                 }
                             >See High Score!</Link>
                         </div>

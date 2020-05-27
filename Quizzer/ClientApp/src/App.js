@@ -7,6 +7,8 @@ import {Login} from "./components/Login";
 import { history } from "./services/helpers";
 import { Quiz } from "./components/Quiz"
 import { Menu } from "./components/Menu";
+import {Highscore} from "./components/Highscore";
+import {PrivateRoute} from "./components/PrivateRoute";
 
 
 import './custom.css'
@@ -29,8 +31,9 @@ export default class App extends Component {
             <Route exact path='/' component={Home} />
             <Route path='/register' component={Register} />         
             <Route path='/login' component={Login} />
-            <Route path='/quiz' component={Quiz} />
-            <Route path='/menu' component={Menu}/>
+            <PrivateRoute path='/quiz' component={Quiz} />
+            <PrivateRoute path='/menu' component={Menu}/>             
+            <PrivateRoute path='/highscore' component={Highscore}/>
           </Layout>
       </Router>
     );

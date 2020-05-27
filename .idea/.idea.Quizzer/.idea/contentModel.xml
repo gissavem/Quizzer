@@ -93,12 +93,14 @@
             <e p="App.js" t="Include" />
             <e p="App.test.js" t="Include" />
             <e p="components" t="Include">
+              <e p="Highscore.js" t="Include" />
               <e p="Home.js" t="Include" />
               <e p="Layout.js" t="Include" />
               <e p="Login.js" t="Include" />
               <e p="Menu.js" t="Include" />
               <e p="NavMenu.css" t="Include" />
               <e p="NavMenu.js" t="Include" />
+              <e p="PrivateRoute.js" t="Include" />
               <e p="Quiz.js" t="Include" />
               <e p="Register.js" t="Include" />
             </e>
@@ -125,6 +127,8 @@
           <e p="20200526115915_init.Designer.cs" t="Include" />
           <e p="20200526134128_scorescreen.cs" t="Include" />
           <e p="20200526134128_scorescreen.Designer.cs" t="Include" />
+          <e p="20200526141305_score.cs" t="Include" />
+          <e p="20200526141305_score.Designer.cs" t="Include" />
           <e p="ContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="Models" t="Include">

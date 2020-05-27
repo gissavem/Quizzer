@@ -15,8 +15,10 @@ componentDidMount(){
     return (
       <div className="text-center mx-auto mt-5">
         <h1 className="display-3">Welcome to Quizzer</h1>
-        <Link to={"/Login"} className="w-100 mt-5 btn btn-secondary">Login</Link>
-        <Link to={"/Menu"} className="w-50 mt-5 btn btn-secondary">Play Game</Link>
+          <div className="d-flex flex-column justify-content-center">
+              <Link to={"/Highscore"} className="align-self-center w-50 mt-5 btn btn-secondary">Highscore</Link>
+              <Link to={"/Menu"} className="align-self-center w-50 mt-5 btn btn-secondary">Play Game</Link>
+          </div>
       </div>
     );
     }

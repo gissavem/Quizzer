@@ -15,32 +15,29 @@ export class Menu extends Component {
     render() {
         return (
             <div>
-                <div className="mx-auto text-center">
-                    <h1 className="mb-5">Hello, Quizzers!</h1>
-                    <h3>Select a difficulty</h3>
-                    <ButtonGroup size='lg' className="mt-2">
-                        <div>
-                            <Link className="btn btn-success" to=
+                <div className="mx-auto text-center mt-5">
+                    <h3 className="display-4">SELECT A DIFFICULTY</h3>
+                        <div className="mt-1 mb-2">
+                            <Link className="btn btn-light btn-lg w-50" to=
                                 {
                                     { pathname: '/quiz', state: { difficulty: 0 } }
                                 }
                             >Easy</Link>
                         </div>
-                        <div>
-                            <Link className="btn btn-warning" to=
+                        <div className="mt-1 mb-2">
+                            <Link className="btn btn-secondary btn-lg w-50" to=
                                 {
                                     { pathname: '/quiz', state: { difficulty: 1 } }
                                 }
                             >Medium</Link>
                         </div>
-                        <div>
-                            <Link className="btn btn-danger" to=
+                        <div className="mt-1 mb-2">
+                            <Link className="btn btn-dark btn-lg w-50" to=
                                 {
                                     { pathname: '/quiz', state: { difficulty: 2 } }
                                 }
                             >Hard</Link>
                         </div>
-                    </ButtonGroup>
                 </div>
             </div>
         );

@@ -31,6 +31,35 @@ namespace Quizzer.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/questions/")]
+        public async Task<IActionResult> Questions()
+        {
+            var result = await context.Questions.ToListAsync();
+            foreach (var question in result)
+                question.Answers = context.Answers.Where(i => i.QuestionId == question.Id).ToList();
+
+            return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
+        }
+
+        [HttpDelete]
+        [Route("[controller]/questions/{id}")]
+        public IActionResult Questions(string id)
+        {
+            Question result = null;
+            try
+            {
+                result = context.Questions.Single(q => q.Id.ToString() == id);
+                context.Questions.Remove(result);
+                context.SaveChanges();
+                return Ok("Successfully removed question.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("[controller]/answers/{id}")]
         public IActionResult Answers(string id)
         {

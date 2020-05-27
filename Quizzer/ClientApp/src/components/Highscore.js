@@ -27,7 +27,6 @@ export class Highscore extends Component {
             class: 'sort',
             fn: (a, b) => a
         }
-
     };;
     
     constructor(props) {

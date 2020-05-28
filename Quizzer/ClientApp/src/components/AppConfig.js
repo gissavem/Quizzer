@@ -19,6 +19,7 @@ export class AppConfig extends Component {
             this.loadQuestions = this.loadQuestions.bind(this);
             this.renderQuestions = this.renderQuestions.bind(this);   
             this.editQuestion = this.editQuestion.bind(this);
+            this.updateStateToReload = this.updateStateToReload.bind(this);
         }
 
     componentDidMount() {
@@ -53,7 +54,7 @@ export class AppConfig extends Component {
     renderQuestions(){
         let questionEdit = "";
         if(this.state.questionToEdit != null){
-            questionEdit = <QuestionEditor question={this.state.questionToEdit}></QuestionEditor>
+            questionEdit = <QuestionEditor /*callbackToRender={this.renderQuestions.bind(this)}*/ callback={this.updateStateToReload.bind(this)} question={this.state.questionToEdit}/>
         }
 
         return(
@@ -69,8 +70,8 @@ export class AppConfig extends Component {
                     </thead>
                     <tbody>
                     {this.state.questions.map(question =>
-                    <tr>
-                        <td>{question.id}</td>
+                    <tr key={question.id}>
+                        <td >{question.id}</td>
                     <td>{question.text}</td>                      
                         <td className="">
                         <button className="border-0 bg-transparent" onClick={() => this.editQuestion(question)}>
@@ -91,6 +92,14 @@ export class AppConfig extends Component {
             </div>
         );
     }  
+    updateStateToReload(isLoading){
+        if(!isLoading){
+            this.loadQuestions();
+        }else{
+            this.setState({loading : isLoading})
+        }
+        
+    }
 
     removeQuestion(questionId){    
         this.setState({loading : true});
@@ -116,29 +125,16 @@ export class AppConfig extends Component {
     }
 
     editQuestion(question){
-        this.setState({questionToEdit : question});
+        this.setState({loading : true}, () => 
+        {
+            this.setState({questionToEdit : question}, () => 
+            {
+                this.setState({loading : false})    
+            });
+            
+        });
 
-        // this.setState({loading : true});
-        // let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
-        // let fetchConfig =
-        //     {
-        //         method : 'PUT',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json',
-        //             'X-XSRF-TOKEN': XSRF
-        //         },
-        //         credentials : 'include',
-        //         body : JSON.stringify({text : value})
-        //     };
-        
-        // fetch('/quiz/questions/' + questionId, fetchConfig)
-        // .then((response) => {
-        //     if(response.ok){
-        //         this.loadQuestions();
-        //         this.setState({loading : false})
-        //     }
-        // });
+
     }
 
     render() {

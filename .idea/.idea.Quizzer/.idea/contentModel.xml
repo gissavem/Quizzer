@@ -140,6 +140,7 @@
           <e p="Question.cs" t="Include" />
           <e p="Score.cs" t="Include" />
           <e p="ScoreModel.cs" t="Include" />
+          <e p="UpdateQuestionModel.cs" t="Include" />
           <e p="User.cs" t="Include" />
           <e p="UserLoginModel.cs" t="Include" />
           <e p="UserRegistrationModel.cs" t="Include" />

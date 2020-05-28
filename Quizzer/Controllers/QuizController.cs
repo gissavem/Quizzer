@@ -61,21 +61,25 @@ namespace Quizzer.Controllers
 
         [HttpPut]
         [Route("[controller]/questions/{id}")]
-        public IActionResult EditQuestion(string id, [FromBody]string value)
+        public IActionResult EditQuestion(string id, [FromBody]UpdateQuestionModel model)
         {
-            Question result = null;
-            try
+            var question = context.Questions.Single(q => q.Id.ToString() == id);
+            question.Text = model.QuestionText;
+            foreach (var answer in model.Answers
+                .Where(answer => answer.Id.ToString() == model.CorrectId))
             {
-                result = context.Questions.Single(q => q.Id.ToString() == id);
-                result.Text = value;
-                context.Questions.Update(result);
-                context.SaveChanges();
-                return Ok("Successfully updated question.");
+                answer.IsCorrect = true;
             }
-            catch (Exception ex)
+            
+            question.Answers = model.Answers;
+            context.Questions.Update(question);
+            context.SaveChanges();
+            
+            return new JsonResult( new
             {
-                return BadRequest(ex.Message);
-            }
+                success = true,
+                description = "question updated"
+            });
         }
 
         [HttpGet]

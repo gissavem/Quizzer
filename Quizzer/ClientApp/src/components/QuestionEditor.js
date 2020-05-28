@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import {handleResponse} from "../services/handle-response";
-import {authenticationService, DisplayFormikState} from "../services/helpers";
-import {Link} from 'react-router-dom';
 import {Jumbotron, Spinner} from 'reactstrap';
+import {authenticationService} from "../services/helpers";
+import {handleResponse} from "../services/handle-response";
 
 export class QuestionEditor extends Component {
     static displayName = QuestionEditor.name;
@@ -14,13 +13,15 @@ export class QuestionEditor extends Component {
         this.state = {
             loading : true,
             question : "",
-            correctId : ""
+            correctId : "",
+            callback : null
          };
          this.renderForm = this.renderForm.bind(this);
     }
 
     componentDidMount(){
-        this.setState({question : this.props.question}, () => {
+        this.setState(
+            {question : this.props.question, callback : this.props.callback}, () => {
             this.state.question.answers.forEach(answer => {
                 if(answer.isCorrect){
                     this.setState({loading : false, correctId : answer.id})
@@ -30,8 +31,6 @@ export class QuestionEditor extends Component {
     }
 
     render() {
-        console.log(this.state.question);
-        console.log(this.state.correctId);
         let content = this.state.loading ? <div className="text-center mt-5"><h3 className="mb-5">Loading Questions</h3><Spinner color="primary" /></div>
         :
         this.renderForm();
@@ -80,9 +79,10 @@ export class QuestionEditor extends Component {
                 {
                     setStatus();
                     this.updateQuestion(question, answer0, answer1, answer2, answer3, correctId)
-                        .then( response =>{
-                            document.location.reload();
-                        }
+                        .then(user =>
+                            {
+                                this.state.callback(false);
+                            }
                         )
                         .catch((error) =>
                         {
@@ -96,7 +96,7 @@ export class QuestionEditor extends Component {
                             <Jumbotron>
                                 <div className="form-group w-50 mx-auto">
                                     <Field name="question.text" type="text" className={'form-control' + (props.errors.question && props.touched.question ? ' is-invalid' : '')} />
-                                    <ErrorMessage name="question" component="div" className="invalid-feedback" />
+                                    <ErrorMessage name="question.text" component="div" className="invalid-feedback" />
                                 </div>
                             </Jumbotron>
                             <div className="card-deck">
@@ -136,7 +136,7 @@ export class QuestionEditor extends Component {
                                 <div className="card bg-info shadow rounded zoom">
                                     <div className="card-body text-center">
                                         <div className="form-group w-50 mx-auto">
-                                            <Field name="answer3.text" type="text" className={'form-control' + (props.errors.answer3 && props.touched.answer3 ? ' is-invalid' : '')} />
+                                            <Field name="answer3.text" type="textarea" className={'form-control' + (props.errors.answer3 && props.touched.answer3 ? ' is-invalid' : '')} />
                                             <ErrorMessage name="answer3" component="div" className="invalid-feedback" />
                                         </div>
                                         <label>
@@ -145,9 +145,13 @@ export class QuestionEditor extends Component {
                                     </div>
                                 </div>
                             </div>                       
+                            <div className="form-group w-50 mx-auto">
+                                <button type="submit" className="btn btn-info w-50 mt-5" disabled={props.isSubmitting}>Save edit</button>
+                                {props.isSubmitting &&
+                                <img alt="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                }
+                            </div>
                         </div>
-                        <DisplayFormikState {...props} />
-
                     </Form>
                 )}
             </Formik>
@@ -156,7 +160,29 @@ export class QuestionEditor extends Component {
     }
 
     updateQuestion(question, answer0, answer1, answer2, answer3, correctId){
+        
+        this.state.callback(true);
+        let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
+        let fetchConfig =
+            {
+                method : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': XSRF
+                },
+                credentials : 'include',
+                body : JSON.stringify(
+                    {
+                        questionId : question.id,
+                        questionText : question.text,
+                        answers : [answer0, answer1, answer2, answer3],
+                        correctId : correctId
+                    })
+            };
 
+        return fetch('/quiz/questions/' + question.id, fetchConfig)
+        .then(handleResponse);
     }
 }
 

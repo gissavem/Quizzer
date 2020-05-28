@@ -34,7 +34,6 @@ function getCookie(cname) {
 function login(email, password) {
     let fetchConfig = {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

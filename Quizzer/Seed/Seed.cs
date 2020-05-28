@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace Quizzer
 {
@@ -21,9 +23,19 @@ namespace Quizzer
             return content;
         }
 
-        public static void SeedDb(Context context)
+        public static void SeedDb(Context context, UserManager<User> userManager)
         {
-            for (int i = 0; i < 10; i++)
+            var user = new User
+            {
+                FirstName = "admin",
+                LastName = "Admin",
+                UserName = "admin@admin.com",
+                Email = "admin@admin.com"
+            };
+            var createResult = userManager.CreateAsync(user, "Admin12345!").Result;
+            var roleResult = userManager.AddToRoleAsync(user, "Admin").Result;
+
+            for (int i = 0; i < 1; i++)
             {
                 var questions = JsonConvert.DeserializeObject<SeedResponse>(GetJsonString().Result).Results;
                 foreach (var question in questions)
@@ -34,8 +46,10 @@ namespace Quizzer
                     newQuestion.Id = Guid.NewGuid();
                     newQuestion.Text = question.question;
                     newQuestion.Difficulty = (Difficulty)Enum.Parse(typeof(Difficulty), char.ToUpper(question.difficulty[0]) + question.difficulty.Substring(1));
+                    newQuestion.PartitionKey = newQuestion.Difficulty.ToString();
                     answers.Add(new Answer 
                     { 
+                        PartitionKey = newQuestion.Difficulty.ToString(),
                         Id = Guid.NewGuid(),
                         QuestionId = newQuestion.Id,
                         IsCorrect = true,
@@ -46,6 +60,7 @@ namespace Quizzer
                         answers.Add(new Answer
                         {
                             Id = Guid.NewGuid(),
+                            PartitionKey = newQuestion.Difficulty.ToString(),
                             IsCorrect = false,
                             QuestionId = newQuestion.Id,
                             Text = answer
@@ -58,7 +73,6 @@ namespace Quizzer
                     }
                 }
                 context.SaveChanges();
-
             }
         }
 

@@ -23,18 +23,34 @@ namespace Quizzer
             this.signInManager = signInManager;
             this.antiForgery = antiForgery;
         }
+
         [HttpPost]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Login([FromBody]UserLoginModel userModel)
         {
-            var result = await signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, false, false);
-            
-            if (!result.Succeeded)
+            //var result = signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, false, false).Result;
+
+            var user = await userManager.FindByEmailAsync(userModel.Email);
+            if (user != null &&
+                await userManager.CheckPasswordAsync(user, userModel.Password))
+            {
+                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme,
+                    new ClaimsPrincipal(identity));
+            } else
+            {
                 return BadRequest(new
                 {
                     success = false,
                     description = "incorrect username or password"
                 });
+            }
+
+             //if (!result.Succeeded)
+
             
             var tokens = antiForgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Append("XSRF-REQUEST-TOKEN", tokens.RequestToken, new Microsoft.AspNetCore.Http.CookieOptions
@@ -58,7 +74,6 @@ namespace Quizzer
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Register([FromBody]UserRegistrationModel userModel)
         {
-
             var user = new User
             {
                 UserName = userModel.Email,

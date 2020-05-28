@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 namespace Quizzer
 {
@@ -22,11 +23,15 @@ namespace Quizzer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string endpoint = "https://emilgissavemaccount.documents.azure.com:443/";
+            string key = "2AZ64cCW5IWDywTaMqgYzwr4181zVgdTe2KEopta7yfa30I9AobAhh7e5DkUaWp2AAjkZw9Ejf4lo1VgEcyJ6w==";
+            string dbName = "Quizzer";
              
             services.AddControllersWithViews();
-            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
-            services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<Context>();
+            //services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<Context>(options => options.UseCosmos(endpoint, key, databaseName: dbName).UseLazyLoadingProxies());
+
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

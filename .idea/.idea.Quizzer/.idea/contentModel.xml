@@ -93,6 +93,7 @@
             <e p="App.js" t="Include" />
             <e p="App.test.js" t="Include" />
             <e p="components" t="Include">
+              <e p="AppConfig.js" t="Include" />
               <e p="Highscore.js" t="Include" />
               <e p="Home.js" t="Include" />
               <e p="Layout.js" t="Include" />
@@ -101,6 +102,7 @@
               <e p="NavMenu.css" t="Include" />
               <e p="NavMenu.js" t="Include" />
               <e p="PrivateRoute.js" t="Include" />
+              <e p="QuestionEditor.js" t="Include" />
               <e p="Quiz.js" t="Include" />
               <e p="Register.js" t="Include" />
             </e>

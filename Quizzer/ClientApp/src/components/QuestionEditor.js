@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import {handleResponse} from "../services/handle-response";
-import {authenticationService} from "../services/helpers";
+import {authenticationService, DisplayFormikState} from "../services/helpers";
 import {Link} from 'react-router-dom';
 import {Jumbotron, Spinner} from 'reactstrap';
 
@@ -49,10 +49,15 @@ export class QuestionEditor extends Component {
                 enableReinitialize = {
                     true
                 }
+                
                 initialValues=
                     {
                         {
-                            question : this.state.question,
+                            question :
+                            {
+                                text : this.state.question.text,
+                                id : this.state.question.id
+                            },
                             answer0 : this.state.question.answers[0],
                             answer1 : this.state.question.answers[1],
                             answer2 : this.state.question.answers[2],
@@ -101,6 +106,9 @@ export class QuestionEditor extends Component {
                                             <Field name="answer0.text" type="text" className={'form-control' + (props.errors.answer0 && props.touched.answer0 ? ' is-invalid' : '')} />
                                             <ErrorMessage name="answer0" component="div" className="invalid-feedback" />
                                         </div>
+                                        <label>
+                                            <Field type="radio" name="correctId" value={props.values.answer0.id}/>
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="card bg-info shadow rounded zoom">
@@ -108,7 +116,10 @@ export class QuestionEditor extends Component {
                                         <div className="form-group w-50 mx-auto">
                                             <Field name="answer1.text" type="text" className={'form-control' + (props.errors.answer1 && props.touched.answer1 ? ' is-invalid' : '')} />
                                             <ErrorMessage name="answer1" component="div" className="invalid-feedback" />
-                                        </div>                                        
+                                        </div>
+                                        <label>
+                                            <Field type="radio" name="correctId" value={props.values.answer1.id}/>
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="card bg-info shadow rounded zoom">
@@ -117,6 +128,9 @@ export class QuestionEditor extends Component {
                                             <Field name="answer2.text" type="text" className={'form-control' + (props.errors.answer2 && props.touched.answer2 ? ' is-invalid' : '')} />
                                             <ErrorMessage name="answer2" component="div" className="invalid-feedback" />
                                         </div>
+                                        <label>
+                                            <Field type="radio" name="correctId" value={props.values.answer2.id}/>
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="card bg-info shadow rounded zoom">
@@ -125,10 +139,15 @@ export class QuestionEditor extends Component {
                                             <Field name="answer3.text" type="text" className={'form-control' + (props.errors.answer3 && props.touched.answer3 ? ' is-invalid' : '')} />
                                             <ErrorMessage name="answer3" component="div" className="invalid-feedback" />
                                         </div>
+                                        <label>
+                                            <Field type="radio" name="correctId" value={props.values.answer3.id}/>
+                                        </label>
                                     </div>
                                 </div>
                             </div>                       
                         </div>
+                        <DisplayFormikState {...props} />
+
                     </Form>
                 )}
             </Formik>

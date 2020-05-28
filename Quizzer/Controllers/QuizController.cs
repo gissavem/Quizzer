@@ -59,6 +59,25 @@ namespace Quizzer.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("[controller]/questions/{id}")]
+        public IActionResult EditQuestion(string id, [FromBody]string value)
+        {
+            Question result = null;
+            try
+            {
+                result = context.Questions.Single(q => q.Id.ToString() == id);
+                result.Text = value;
+                context.Questions.Update(result);
+                context.SaveChanges();
+                return Ok("Successfully updated question.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("[controller]/answers/{id}")]
         public IActionResult Answers(string id)

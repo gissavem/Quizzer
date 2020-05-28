@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import {authenticationService} from "../services/helpers";
-import {Button, Spinner, Table} from "reactstrap";
+import {Button, Spinner, Table, Jumbotron} from "reactstrap";
+import {QuestionEditor} from "./QuestionEditor";
 
 export class AppConfig extends Component {
     static displayName = AppConfig.name;
@@ -11,11 +12,14 @@ export class AppConfig extends Component {
         this.state = 
             {
                 loading : true,
-                questions : []
+                questions : [],
+                questionToEdit : null
             };  
+
             this.loadQuestions = this.loadQuestions.bind(this);
             this.renderQuestions = this.renderQuestions.bind(this);   
-    }
+            this.editQuestion = this.editQuestion.bind(this);
+        }
 
     componentDidMount() {
         this.loadQuestions();
@@ -38,42 +42,57 @@ export class AppConfig extends Component {
             .then(response => response.json())
             .then((jsondata) => 
             {
-                this.setState({questions : jsondata, loading : false})
+                this.setState(
+                    {
+                        questions : jsondata, 
+                        loading : false
+                    });
             })        
     }
 
     renderQuestions(){
+        let questionEdit = "";
+        if(this.state.questionToEdit != null){
+            questionEdit = <QuestionEditor question={this.state.questionToEdit}></QuestionEditor>
+        }
+
         return(
             <div>
+                <div className="pre-scrollable">
                 <Table>
                     <thead>
                     <tr>
-                        {/*<th>#</th>*/}
                         <th>Id</th>
                         <th>Question</th>
-                        <th>Remove</th>
+                        <th>Edit</th>
                     </tr>
                     </thead>
                     <tbody>
                     {this.state.questions.map(question =>
                     <tr>
-                        {/*<th scope="row">{index + 1}</th>*/}
                         <td>{question.id}</td>
-                        <td>{question.text}</td>                      
-                        <td className="text-center">
-                            <button className="border-0 bg-transparent" onClick={() => this.removeQuestion(question.id)}>
-                                <i className={`fas fa-trash`} />
-                            </button>
+                    <td>{question.text}</td>                      
+                        <td className="">
+                        <button className="border-0 bg-transparent" onClick={() => this.editQuestion(question)}>
+                            <i className={`fas fa-edit`} />
+                        </button>
+                        <button className="border-0 bg-transparent" onClick={() => this.removeQuestion(question.id)}>
+                            <i className={`fas fa-trash`} />
+                        </button>
                         </td>
                     </tr>
                     )}
                     </tbody>
-                </Table>
+                </Table>  
+                </div>
+                <div>
+                    {questionEdit}
+                </div>
             </div>
         );
-    }
-    
-    removeQuestion(questionId){
+    }  
+
+    removeQuestion(questionId){    
         this.setState({loading : true});
         let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
         let fetchConfig =
@@ -96,9 +115,34 @@ export class AppConfig extends Component {
         });
     }
 
-    render() {
-        let content = "";
+    editQuestion(question){
+        this.setState({questionToEdit : question});
+
+        // this.setState({loading : true});
+        // let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
+        // let fetchConfig =
+        //     {
+        //         method : 'PUT',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json',
+        //             'X-XSRF-TOKEN': XSRF
+        //         },
+        //         credentials : 'include',
+        //         body : JSON.stringify({text : value})
+        //     };
         
+        // fetch('/quiz/questions/' + questionId, fetchConfig)
+        // .then((response) => {
+        //     if(response.ok){
+        //         this.loadQuestions();
+        //         this.setState({loading : false})
+        //     }
+        // });
+    }
+
+    render() {
+        let content = "";       
         if(this.state.loading){
             content = <div className="text-center mt-5"><h3 className="mb-5">Loading Questions</h3><Spinner color="primary" /></div>;
         }

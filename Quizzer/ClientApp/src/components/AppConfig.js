@@ -20,6 +20,7 @@ export class AppConfig extends Component {
             this.renderQuestions = this.renderQuestions.bind(this);   
             this.editQuestion = this.editQuestion.bind(this);
             this.updateStateToReload = this.updateStateToReload.bind(this);
+            this.unmountEditor = this.unmountEditor.bind(this);
         }
 
     componentDidMount() {
@@ -54,13 +55,13 @@ export class AppConfig extends Component {
     renderQuestions(){
         let questionEdit = "";
         if(this.state.questionToEdit != null){
-            questionEdit = <QuestionEditor /*callbackToRender={this.renderQuestions.bind(this)}*/ callback={this.updateStateToReload.bind(this)} question={this.state.questionToEdit}/>
+            questionEdit = <QuestionEditor unmountEditor={this.unmountEditor.bind(this)} updateParentState={this.updateStateToReload.bind(this)} question={this.state.questionToEdit}/>
         }
 
         return(
-            <div>
+            <div>             
                 <div className="pre-scrollable">
-                <Table>
+                <Table className="border">
                     <thead>
                     <tr>
                         <th>Id</th>
@@ -92,9 +93,16 @@ export class AppConfig extends Component {
             </div>
         );
     }  
+
+    unmountEditor(){
+        console.log("Unmounting editor..");
+        this.setState({questionToEdit : null});
+    }
+
     updateStateToReload(isLoading){
         if(!isLoading){
             this.loadQuestions();
+            this.setState({questionToEdit : null});
         }else{
             this.setState({loading : isLoading})
         }
@@ -125,16 +133,7 @@ export class AppConfig extends Component {
     }
 
     editQuestion(question){
-        this.setState({loading : true}, () => 
-        {
-            this.setState({questionToEdit : question}, () => 
-            {
-                this.setState({loading : false})    
-            });
-            
-        });
-
-
+        this.setState({questionToEdit : question});
     }
 
     render() {

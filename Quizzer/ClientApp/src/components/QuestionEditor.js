@@ -14,14 +14,19 @@ export class QuestionEditor extends Component {
             loading : true,
             question : "",
             correctId : "",
-            callback : null
+            updateParentState : null,
+            unmountEditor : null
          };
          this.renderForm = this.renderForm.bind(this);
     }
 
     componentDidMount(){
         this.setState(
-            {question : this.props.question, callback : this.props.callback}, () => {
+            {
+                question : this.props.question, 
+                updateParentState : this.props.updateParentState,
+                unmountEditor : this.props.unmountEditor
+            }, () => {
             this.state.question.answers.forEach(answer => {
                 if(answer.isCorrect){
                     this.setState({loading : false, correctId : answer.id})
@@ -81,7 +86,7 @@ export class QuestionEditor extends Component {
                     this.updateQuestion(question, answer0, answer1, answer2, answer3, correctId)
                         .then(user =>
                             {
-                                this.state.callback(false);
+                                this.state.updateParentState(false);
                             }
                         )
                         .catch((error) =>
@@ -92,6 +97,9 @@ export class QuestionEditor extends Component {
                 }}>
                 {props => (
                     <Form>
+                        <button type="button" className="close" aria-label="Close" onClick={() => this.state.unmountEditor()}>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <div>             
                             <Jumbotron>
                                 <div className="form-group w-50 mx-auto">
@@ -160,8 +168,7 @@ export class QuestionEditor extends Component {
     }
 
     updateQuestion(question, answer0, answer1, answer2, answer3, correctId){
-        
-        this.state.callback(true);
+        this.state.updateParentState(true);
         let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
         let fetchConfig =
             {

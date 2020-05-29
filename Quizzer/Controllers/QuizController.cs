@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +33,14 @@ namespace Quizzer.Controllers
             return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost]
         [Route("[controller]/questions")]
         public IActionResult InsertQuestion([FromBody]AddQuestionModel model)
         {
+            if (!User.IsInRole("Admin"))
+                return Unauthorized(new { success = false, reason = "Unauthorized" });
+
             try
             {
                 var question = new Question
@@ -71,11 +73,14 @@ namespace Quizzer.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize]
         [HttpGet]
         [Route("[controller]/questions")]
         public async Task<IActionResult> GetAllQuestions()
         {
+            if(!User.IsInRole("Admin"))
+                return Unauthorized(new {success = false, reason = "Unauthorized" });
+            
             var result = await context.Questions.ToListAsync();
             foreach (var question in result)
                 question.Answers = context.Answers.ToList().Where(i => i.QuestionId == question.Id).ToList();
@@ -83,11 +88,14 @@ namespace Quizzer.Controllers
             return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete]
         [Route("[controller]/questions/{id}")]
         public IActionResult DeleteQuestion(string id)
         {
+            if (!User.IsInRole("Admin"))
+                return Unauthorized(new { success = false, reason = "Unauthorized" });
+
             Question result = null;
             try
             {
@@ -102,11 +110,14 @@ namespace Quizzer.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPut]
         [Route("[controller]/questions/{id}")]
         public IActionResult EditQuestion(string id, [FromBody]UpdateQuestionModel model)
         {
+            if (!User.IsInRole("Admin"))
+                return Unauthorized(new { success = false, reason = "Unauthorized" });
+
             var question = context.Questions.ToList().Single(q => q.Id.ToString() == id);
             question.Text = model.QuestionText;
             foreach (var answer in model.Answers
@@ -150,7 +161,6 @@ namespace Quizzer.Controllers
             
         }
 
-        [Authorize]
         [HttpGet]
         [Route("{controller}/seedDb")]
         public async Task<IActionResult> SeedDb()

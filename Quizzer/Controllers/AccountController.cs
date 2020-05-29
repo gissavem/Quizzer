@@ -29,7 +29,6 @@ namespace Quizzer
         public async Task<IActionResult> Login([FromBody]UserLoginModel userModel)
         {
             var result = signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, false, false).Result;
-
             if (!result.Succeeded)
             { 
                 return BadRequest(new
@@ -43,8 +42,7 @@ namespace Quizzer
             Response.Cookies.Append("XSRF-REQUEST-TOKEN", tokens.RequestToken, new Microsoft.AspNetCore.Http.CookieOptions
             {
                 HttpOnly = false
-            });
-            
+            });         
             return Ok();
         }
         
@@ -53,7 +51,6 @@ namespace Quizzer
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
- 
             return Ok();
         }
         
@@ -69,14 +66,11 @@ namespace Quizzer
                 LastName = userModel.LastName
             };
             var result = await userManager.CreateAsync(user, userModel.Password);
-
             if(!result.Succeeded)
             {
                 return BadRequest(result.Errors.First());
             }
- 
             await userManager.AddToRoleAsync(user, "Player");
- 
             return Json(new
             {
                 success = true,

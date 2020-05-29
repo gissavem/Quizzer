@@ -41,12 +41,17 @@ export class AppConfig extends Component {
                     'Content-Type': 'application/json',
                     'X-XSRF-TOKEN': XSRF
                 },
-                credentials : 'include',
-                
+                credentials : 'include'        
             };
         
         fetch('/quiz/questions', fetchConfig)
-            .then(response => response.json())
+            .then((response) => {
+                if(!response.ok){
+                    this.props.history.push('/')
+                    Promise.reject(this);
+                } 
+                   return response.json()
+            })
             .then((jsondata) => 
             {
                 this.setState(
@@ -150,6 +155,9 @@ export class AppConfig extends Component {
             if(response.ok){
                 this.loadQuestions();
                 this.setState({loading : false})
+            } else {
+                this.props.history.push("/");
+                Promise.reject(this);
             }
         });
     }

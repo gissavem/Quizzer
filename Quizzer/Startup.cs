@@ -38,9 +38,7 @@ namespace Quizzer
 
             services.AddAuthentication();
 
-            services.AddAuthorization(options =>
-            options.AddPolicy("Admin",
-                policy => policy.RequireClaim("Admin")));
+            services.AddAuthorization();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

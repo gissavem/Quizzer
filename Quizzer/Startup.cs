@@ -22,14 +22,9 @@ namespace Quizzer
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            //string endpoint = "https://emilgissavemaccount.documents.azure.com:443/";
-            //string key = "2AZ64cCW5IWDywTaMqgYzwr4181zVgdTe2KEopta7yfa30I9AobAhh7e5DkUaWp2AAjkZw9Ejf4lo1VgEcyJ6w==";
-            //string dbName = "Quizzer";
-             
+        {             
             services.AddControllersWithViews();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDbContext<Context>(options => options.UseCosmos(endpoint, key, databaseName: dbName).UseLazyLoadingProxies());
 
             services.AddIdentity<User, IdentityRole>()
                 .AddRoles<IdentityRole>()

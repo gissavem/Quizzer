@@ -48,15 +48,15 @@ namespace Quizzer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b3b1e1dd-82e9-4f2e-871d-4c2f92322307",
-                            ConcurrencyStamp = "59d7c468-1015-496d-9771-386ab2fdf293",
+                            Id = "5a86c3cf-ed56-4df4-b4f6-df89d21d1223",
+                            ConcurrencyStamp = "542a5b94-7c16-4aef-8b57-4ef45b676e13",
                             Name = "Player",
                             NormalizedName = "PLAYER"
                         },
                         new
                         {
-                            Id = "efaa7877-ceec-4195-a9ba-2b963f90365e",
-                            ConcurrencyStamp = "4995b39e-52db-4671-aa60-c17e97533225",
+                            Id = "943fe225-42cd-4dc5-bed5-b29458163ce9",
+                            ConcurrencyStamp = "81d9f673-d2e6-4c40-85de-da6c08ea8793",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik, Field, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
-import {Jumbotron, Spinner, Modal, ModalHeader, ModalBody, ModalFooter, Button, Label} from 'reactstrap';
+import {Spinner, Modal, ModalBody, ModalFooter, Button, Label} from 'reactstrap';
 import {authenticationService} from "../services/helpers";
 import {handleResponse} from "../services/handle-response";
 
@@ -174,7 +174,7 @@ export class QuestionEditor extends Component {
                     })
             };
 
-        return fetch('/quiz/questions/' + question.id, fetchConfig)
+        return fetch('/api/questions/' + question.id, fetchConfig)
         .then(handleResponse);
     }
 }

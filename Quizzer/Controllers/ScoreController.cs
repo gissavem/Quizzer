@@ -18,40 +18,59 @@ namespace Quizzer.Controllers
             this.userManager = userManager;
             this.context = context;
         }
+
         [HttpPost]
         [Authorize]
-        [Route("score")]
+        [Route("api/score")]
         public async Task<IActionResult> Score([FromBody]ScoreModel scoreModel)
         {
-            var score = new Score
+            try
             {
-                UserId = Guid.Parse(userManager.GetUserAsync(User).Result.Id),
-                DifficultyLevel = (Difficulty)scoreModel.Difficulty,
-                Points = scoreModel.Score,
-                Time = DateTime.Now,
-                Id = Guid.NewGuid()
-            };
-            context.Scores.Add(score);
-            await context.SaveChangesAsync();
-            return Ok();
+                var score = new Score
+                {
+                    UserId = Guid.Parse(userManager.GetUserAsync(User).Result.Id),
+                    DifficultyLevel = (Difficulty)scoreModel.Difficulty,
+                    Points = scoreModel.Score,
+                    Time = DateTime.Now,
+                    Id = Guid.NewGuid()
+                };
+                context.Scores.Add(score);
+                await context.SaveChangesAsync();
+                return new OkObjectResult(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully added score to database" });
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+            }
         }
+
         [HttpGet]
         [Authorize]
-        [Route("score")]
+        [Route("api/score")]
         public IActionResult Score()
         {
-            var query = from score in context.Scores.ToList()
-                join user in context.Users.ToList() on score.UserId.ToString() equals user.Id
-                select new
-                {
-                    userName = $"{user.FirstName} {user.LastName}",
-                    score = score.Points,
-                    time = score.Time,
-                    difficulty = score.DifficultyLevel.ToString()
+            try
+            {
+                var query = from score in context.Scores.ToList()
+                    join user in context.Users.ToList() on score.UserId.ToString() equals user.Id
+                    select new
+                    {
+                        userName = $"{user.FirstName} {user.LastName}",
+                        score = score.Points,
+                        time = score.Time,
+                        difficulty = score.DifficultyLevel.ToString()
+                    };
+                var queryToList = query.ToList();
 
-                };
+                if (!queryToList.Any())
+                    return new NotFoundObjectResult(new { Success = false, StatusCode = 404, Error = "Not Found", Message = "No highscores" });
 
-            return new JsonResult(query.ToList());
+                return new OkObjectResult(query.ToList());
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+            }
         }
     }
 }

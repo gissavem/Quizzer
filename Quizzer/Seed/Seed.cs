@@ -35,7 +35,7 @@ namespace Quizzer
             var createResult = userManager.CreateAsync(user, "Admin12345!").Result;
             var roleResult = userManager.AddToRoleAsync(user, "Admin").Result;
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var questions = JsonConvert.DeserializeObject<SeedResponse>(GetJsonString().Result).Results;
                 foreach (var question in questions)
@@ -46,8 +46,8 @@ namespace Quizzer
                     newQuestion.Id = Guid.NewGuid();
                     newQuestion.Text = question.question;
                     newQuestion.Difficulty = (Difficulty)Enum.Parse(typeof(Difficulty), char.ToUpper(question.difficulty[0]) + question.difficulty.Substring(1));
-                    answers.Add(new Answer 
-                    { 
+                    answers.Add(new Answer
+                    {
                         Id = Guid.NewGuid(),
                         QuestionId = newQuestion.Id,
                         IsCorrect = true,

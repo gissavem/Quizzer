@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './NavMenu.css';
 import {authenticationService} from "../services/helpers";
 
@@ -23,7 +23,6 @@ export class NavMenu extends Component {
 
   logout() {
     authenticationService.logout();
-    //history.push('/login')
   }
 
   toggleNavbar () {

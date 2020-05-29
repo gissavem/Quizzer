@@ -7,7 +7,7 @@ export function handleResponse(response)
         const data = text && JSON.parse(text);
 
         if ([401, 403, 405].indexOf(response.status) !== -1){
-            return Promise.reject({statusCode : "Unauthorized"})
+            return Promise.reject({statusCode : 401, message : "Unauthorized"})
         }
 
         if (!response.ok) 

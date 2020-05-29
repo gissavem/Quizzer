@@ -1,10 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup } from 'reactstrap';
-import {
-    Spinner, Progress, Jumbotron, Card, CardImg, CardTitle, CardText, CardColumns,
-    CardSubtitle, CardBody
-} from 'reactstrap';
+import { Button} from 'reactstrap';
+import { Spinner, Progress, Jumbotron } from 'reactstrap';
 import {authenticationService} from "../services/helpers";
 
 export class Quiz extends Component {
@@ -64,7 +61,7 @@ export class Quiz extends Component {
                 </Jumbotron>
                 <div className="card-deck">
                     {question.answers.map(answer =>
-                    <div id={answer.id} className="card bg-info shadow rounded zoom" onClick={() => this.handleClick(answer)}>
+                    <div key={answer.id} id={answer.id} className="card bg-info shadow rounded zoom" onClick={() => this.handleClick(answer)}>
                         <div className="card-body text-center">
                             <p className="card-text h5 text-white">{answer.text}</p>
                         </div>
@@ -79,7 +76,7 @@ export class Quiz extends Component {
     }
 
     async loadQuestions(difficulty) {
-        await fetch('/quiz/questions/' + difficulty)
+        await fetch('/api/questions/' + difficulty)
             .then((fetchResult) => fetchResult.json())
             .then(questions => {
                 this.setState(
@@ -93,7 +90,7 @@ export class Quiz extends Component {
             return;
         }
         let div = document.getElementById(answer.id);    
-        let clickResponse = await fetch("quiz/answers/" + answer.id)
+        let clickResponse = await fetch("api/answers/" + answer.id)
         .then(response => response.json())
         .then((jsonresponse) =>{return jsonresponse});
         div.classList.remove('bg-info');
@@ -101,15 +98,13 @@ export class Quiz extends Component {
         if(clickResponse.isCorrect){
             div.classList.add('bg-success');
             this.setState({score : this.state.score + 1});
-            console.log(this.state.score)
         } else {
             div.classList.add('bg-danger');
             document.getElementById(clickResponse.correctAnswer).classList.remove('bg-info');
             document.getElementById(clickResponse.correctAnswer).classList.add('bg-success');
 
         }
-        this.setState({answered : true});
-        
+        this.setState({answered : true}); 
     }
 
     nextQuestion(){
@@ -127,6 +122,7 @@ export class Quiz extends Component {
             answers.item(i).classList.add("bg-info");
         }
     }
+
     renderScoreScreen(){
         return(
             !this.state.resultSaved ? 
@@ -177,7 +173,7 @@ export class Quiz extends Component {
                 })
             };
         
-        await fetch('score', fetchConfig)
+        await fetch('/api/score', fetchConfig)
             .then((response) => {
                 if (response.ok){
                     this.setState({resultSaved : true});

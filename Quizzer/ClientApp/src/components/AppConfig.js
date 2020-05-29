@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import {authenticationService} from "../services/helpers";
-import {Button, Spinner, Table, Jumbotron} from "reactstrap";
+import {Button, Spinner, Table} from "reactstrap";
 import {QuestionEditor} from "./QuestionEditor";
 import {QuestionCreator} from "./QuestionCreator";
 
@@ -44,11 +43,10 @@ export class AppConfig extends Component {
                 credentials : 'include'        
             };
         
-        fetch('/quiz/questions', fetchConfig)
+        fetch('/api/questions', fetchConfig)
             .then((response) => {
                 if(!response.ok){
                     this.props.history.push('/')
-                    Promise.reject(this);
                 } 
                    return response.json()
             })
@@ -150,7 +148,7 @@ export class AppConfig extends Component {
             credentials : 'include'
         };
         
-        fetch('/quiz/questions/' + questionId, fetchConfig)
+        fetch('/api/questions/' + questionId, fetchConfig)
         .then((response) => {
             if(response.ok){
                 this.loadQuestions();

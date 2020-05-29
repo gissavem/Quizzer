@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik, Field, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
-import {Jumbotron, Spinner, Modal, ModalHeader, ModalBody, ModalFooter, Button, Label} from 'reactstrap';
+import {Modal, ModalBody, ModalFooter, Button, Label} from 'reactstrap';
 import {authenticationService} from "../services/helpers";
 import {handleResponse} from "../services/handle-response";
 
@@ -160,7 +160,7 @@ export class QuestionCreator extends Component {
                     })
             };
 
-        return fetch('/quiz/questions', fetchConfig)
+        return fetch('/api/questions', fetchConfig)
         .then(handleResponse);
     }
 }

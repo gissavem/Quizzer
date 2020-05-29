@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Link } from 'react-router-dom';
-import {Button} from 'reactstrap';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -20,7 +19,7 @@ export class Home extends Component {
               <Link to={"/Menu"} className="align-self-center w-50 mt-3 btn btn-info">Play Game</Link>
           </div>
           <div className="mt-3">
-            <img src='https://media.giphy.com/media/fxk77fLi2ZPQU6kHKx/giphy.gif' className="w-75"></img>
+            <img src='https://media.giphy.com/media/fxk77fLi2ZPQU6kHKx/giphy.gif' alt="loading..." className="w-75"></img>
           </div> 
       </div>
     );

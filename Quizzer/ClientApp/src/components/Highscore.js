@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import {authenticationService} from "../services/helpers";
-import {Button, Spinner, Table} from "reactstrap";
+import {Spinner, Table, Jumbotron} from "reactstrap";
 
 export class Highscore extends Component {
     static displayName = Highscore.name;
@@ -91,7 +90,7 @@ export class Highscore extends Component {
                 credentials : 'include'
             };
         
-        fetch('/score', fetchConfig)
+        fetch('/api/score', fetchConfig)
             .then(response => response.json())
             .then((jsondata) => 
             {
@@ -108,7 +107,6 @@ export class Highscore extends Component {
                 <Table size="sm" borderless>
                     <thead>
                     <tr>
-                        {/*<th>#</th>*/}
                         <th>Name</th>
                         <th>Difficulty</th>
                         <th>Date
@@ -127,8 +125,7 @@ export class Highscore extends Component {
                     {[...this.state.scores]
                         .sort(this.sortTypes[this.state.currentSort].fn)
                         .map((score, index) =>
-                    <tr>
-                        {/*<th scope="row">{index + 1}</th>*/}
+                    <tr key={score.time}>
                         <td>{score.userName}</td>
                         <td>{score.difficulty}</td>
                         <td>{new Date(score.time).getDate()}/
@@ -148,6 +145,9 @@ export class Highscore extends Component {
         
         if(this.state.loading){
             content = <div className="text-center mt-5"><h3 className="mb-5">Loading Highscores</h3><Spinner color="primary" /></div>;
+        }
+        else if(!this.state.scores.length){
+                content = <div className="text-center"><Jumbotron><h2>No scores in database yet</h2></Jumbotron></div>
         }
         else{
             content = this.renderHighScore();

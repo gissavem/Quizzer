@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import {Jumbotron, Button } from 'reactstrap';
 import * as Yup from 'yup';
-import {handleResponse} from "../services/handle-response";
 import {authenticationService} from "../services/helpers";
 import {Link} from 'react-router-dom';
 
@@ -11,11 +11,18 @@ export class Login extends Component {
     constructor(props) {
         super(props);
         this.state = { };
+        this.seedDatabase = this.seedDatabase.bind(this);
     }
 
     render() {
         return (
             <div className="text-center mt-5 mx-auto">
+                <Jumbotron>
+                    <h3>Dear pontus</h3>
+                    <p>If this is your first time using this app, click here. <Button onClick={() => this.seedDatabase()}>Seed database</Button></p>
+                    <p>Email : Admin1@admin.com</p>
+                    <p>Pass : Admin12345!</p>
+                </Jumbotron>
                 <Formik
                     initialValues=
                         {
@@ -73,6 +80,10 @@ export class Login extends Component {
                 <Link to={"/Register"}>Don't have an account?{<br></br>}Register one here.</Link>
             </div>
         );
+    }
+
+    seedDatabase(){
+        fetch("api/seedDb").then(response => this.props.history.push("/"));
     }
 }
 

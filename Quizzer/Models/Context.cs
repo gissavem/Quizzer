@@ -12,8 +12,8 @@ namespace Quizzer
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.Entity<Question>().ToContainer("Questions");
-            modelBuilder.Entity<Answer>().ToContainer("Answers");
+            //modelBuilder.Entity<Question>().ToContainer("Questions");
+            //modelBuilder.Entity<Answer>().ToContainer("Answers");
             base.OnModelCreating(modelBuilder);
         }
 

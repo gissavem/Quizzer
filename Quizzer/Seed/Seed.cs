@@ -46,10 +46,8 @@ namespace Quizzer
                     newQuestion.Id = Guid.NewGuid();
                     newQuestion.Text = question.question;
                     newQuestion.Difficulty = (Difficulty)Enum.Parse(typeof(Difficulty), char.ToUpper(question.difficulty[0]) + question.difficulty.Substring(1));
-                    newQuestion.PartitionKey = newQuestion.Difficulty.ToString();
                     answers.Add(new Answer 
                     { 
-                        PartitionKey = newQuestion.Difficulty.ToString(),
                         Id = Guid.NewGuid(),
                         QuestionId = newQuestion.Id,
                         IsCorrect = true,
@@ -60,7 +58,6 @@ namespace Quizzer
                         answers.Add(new Answer
                         {
                             Id = Guid.NewGuid(),
-                            PartitionKey = newQuestion.Difficulty.ToString(),
                             IsCorrect = false,
                             QuestionId = newQuestion.Id,
                             Text = answer

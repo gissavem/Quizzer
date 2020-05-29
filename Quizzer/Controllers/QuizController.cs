@@ -22,10 +22,10 @@ namespace Quizzer.Controllers
             this.userManager = userManager;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [Route("[controller]/questions/{id}")]
-        public async Task<IActionResult> Questions(int id)
+        public IActionResult GetQuestions(int id)
         {
             var result = context.Questions.Where(q => q.Difficulty == (Difficulty)id).ToList().OrderBy(x => Guid.NewGuid()).Take(15).ToList();
             foreach (var question in result)
@@ -34,9 +34,47 @@ namespace Quizzer.Controllers
             return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Route("[controller]/questions")]
+        public IActionResult InsertQuestion([FromBody]AddQuestionModel model)
+        {
+            try
+            {
+                var question = new Question
+                {
+                    Id = Guid.NewGuid(),
+                    Difficulty = Difficulty.Easy,
+                    Text = model.QuestionText
+                };
+                var answers = new List<Answer>();
+                for (int i = 0; i < 4; i++)
+                {
+                    answers.Add(new Answer
+                    {
+                        Id = Guid.NewGuid(),
+                        QuestionId = question.Id,
+                        Text = model.Answers[i]
+                    });
+                }
+                answers[int.Parse(model.CorrectId)].IsCorrect = true;
+                question.Answers = answers;
+
+                context.Questions.Add(question);
+                context.Answers.AddRange(answers);
+                context.SaveChanges();
+                return new JsonResult(new { success = true, description = "added question to database" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, description = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
-        [Route("[controller]/questions/")]
-        public async Task<IActionResult> Questions()
+        [Route("[controller]/questions")]
+        public async Task<IActionResult> GetAllQuestions()
         {
             var result = await context.Questions.ToListAsync();
             foreach (var question in result)
@@ -45,9 +83,10 @@ namespace Quizzer.Controllers
             return !result.Any() ? new JsonResult(new { success = false, description = "No questions" }) : new JsonResult(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("[controller]/questions/{id}")]
-        public IActionResult Questions(string id)
+        public IActionResult DeleteQuestion(string id)
         {
             Question result = null;
             try
@@ -63,6 +102,7 @@ namespace Quizzer.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("[controller]/questions/{id}")]
         public IActionResult EditQuestion(string id, [FromBody]UpdateQuestionModel model)
@@ -86,9 +126,10 @@ namespace Quizzer.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet]
         [Route("[controller]/answers/{id}")]
-        public IActionResult Answers(string id)
+        public IActionResult CheckAnswer(string id)
         {
             var result = context.Answers.ToList().Single(a => a.Id.ToString() == id);
 
@@ -108,7 +149,8 @@ namespace Quizzer.Controllers
             });
             
         }
-        
+
+        [Authorize]
         [HttpGet]
         [Route("{controller}/seedDb")]
         public async Task<IActionResult> SeedDb()

@@ -27,10 +27,10 @@ namespace Quizzer
         {
             var user = new User
             {
-                FirstName = "admin",
+                FirstName = "Admin",
                 LastName = "Admin",
-                UserName = "admin@admin.com",
-                Email = "admin@admin.com"
+                UserName = "admin1@admin.com",
+                Email = "admin1@admin.com"
             };
             var createResult = userManager.CreateAsync(user, "Admin12345!").Result;
             var roleResult = userManager.AddToRoleAsync(user, "Admin").Result;

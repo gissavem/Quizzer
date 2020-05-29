@@ -31,7 +31,16 @@ namespace Quizzer
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddDbContext<Context>(options => options.UseCosmos(endpoint, key, databaseName: dbName).UseLazyLoadingProxies());
 
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>();
+            services.AddIdentity<User, IdentityRole>()
+                .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<Context>();
+
+            services.AddAuthentication();
+
+            services.AddAuthorization(options =>
+            options.AddPolicy("Admin",
+                policy => policy.RequireClaim("Admin")));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

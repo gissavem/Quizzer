@@ -12,10 +12,8 @@ namespace Quizzer.Controllers
     [ApiController]
     public class QuizController : Controller
     {
-        //new {Success = false, StatusCode = 400, Error = "Bad Request", Message = "Id is less than 0" }
         private readonly Context context;
         private readonly UserManager<User> userManager;
-
         public QuizController(Context context, UserManager<User> userManager)
         {
             this.context = context;
@@ -28,11 +26,11 @@ namespace Quizzer.Controllers
         public IActionResult GetQuestions(int id)
         {
             if (id < 0)
-                return new BadRequestObjectResult(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = "Id is less than 0" });      
+                return new BadRequestObjectResult(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = "Id can't be less than 0" });      
 
             try
             {
-                var result = context.Questions.Where(q => q.Difficulty == (Difficulty)id).ToList().OrderBy(x => Guid.NewGuid()).Take(15).ToList();
+                var result = context.Questions.Where(q => q.Difficulty == (Difficulty)id).OrderBy(x => Guid.NewGuid()).Take(15).ToList();
                 foreach (var question in result)
                     question.Answers = context.Answers.ToList().Where(i => i.QuestionId == question.Id).ToList();
 

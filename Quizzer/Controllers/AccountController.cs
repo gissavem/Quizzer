@@ -12,14 +12,12 @@ namespace Quizzer
     public class AccountController : Controller
     {
         private readonly UserManager<User> userManager;
-        private readonly Context context;
         private readonly SignInManager<User> signInManager;
         private readonly IAntiforgery antiForgery;
 
-        public AccountController(UserManager<User> userManager, Context context, SignInManager<User> signInManager, IAntiforgery antiForgery)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IAntiforgery antiForgery)
         {
             this.userManager = userManager;
-            this.context = context;
             this.signInManager = signInManager;
             this.antiForgery = antiForgery;
         }
@@ -46,8 +44,8 @@ namespace Quizzer
             return Ok();
         }
         
-        //[ValidateAntiForgeryToken]
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();

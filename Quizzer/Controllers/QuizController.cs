@@ -169,7 +169,7 @@ namespace Quizzer.Controllers
         public async Task<IActionResult> SeedDb()
         {
             Seed.SeedDb(context, userManager);
-            return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully removed question from database" });
+            return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully seeded database" });
         }
     }
 }

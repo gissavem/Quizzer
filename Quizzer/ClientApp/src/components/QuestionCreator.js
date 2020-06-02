@@ -37,7 +37,6 @@ export class QuestionCreator extends Component {
     }
 
     renderForm(){
-        console.log("QuestionCreator");
         return(
         <div>
             <Modal isOpen={true} backdrop="static" className="modal-lg">

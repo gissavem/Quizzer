@@ -36,11 +36,11 @@ namespace Quizzer.Controllers
                 };
                 context.Scores.Add(score);
                 await context.SaveChangesAsync();
-                return new OkObjectResult(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully added score to database" });
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully added score to database" });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
         }
 
@@ -63,13 +63,13 @@ namespace Quizzer.Controllers
                 var queryToList = query.ToList();
 
                 if (!queryToList.Any())
-                    return new NotFoundObjectResult(new { Success = false, StatusCode = 404, Error = "Not Found", Message = "No highscores" });
+                    return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "No scores currently in database" });
 
-                return new OkObjectResult(query.ToList());
+                return Ok(query.ToList());
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
         }
     }

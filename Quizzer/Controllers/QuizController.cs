@@ -26,7 +26,7 @@ namespace Quizzer.Controllers
         public IActionResult GetQuestions(int id)
         {
             if (id < 0)
-                return new BadRequestObjectResult(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = "Id can't be less than 0" });      
+                return BadRequest(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = "Id can't be less than 0" });      
 
             try
             {
@@ -35,13 +35,13 @@ namespace Quizzer.Controllers
                     question.Answers = context.Answers.ToList().Where(i => i.QuestionId == question.Id).ToList();
 
                 if (!result.Any())
-                    return new NotFoundObjectResult(new { Success = false, StatusCode = 404, Error = "Not Found", Message = "No questions" });
+                    return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "No questions currently in database" });
 
-                return new OkObjectResult(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new {Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }         
         }
 
@@ -56,12 +56,12 @@ namespace Quizzer.Controllers
             var result = await context.Questions.ToListAsync();
 
             if (!result.Any())
-                return new NotFoundObjectResult(new { Success = false, StatusCode = 404, Error = "Not Found", Message = "No questions" });
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "No questions currently in database" });
 
             foreach (var question in result)
                 question.Answers = context.Answers.ToList().Where(i => i.QuestionId == question.Id).ToList();
 
-            return new OkObjectResult(result);
+            return Ok(result);
         }
         
         [Authorize]
@@ -87,11 +87,11 @@ namespace Quizzer.Controllers
                 context.Answers.AddRange(answers);
                 context.SaveChanges();
 
-                return new OkObjectResult(new { Success = true, StatusCode = 200, Error = "", Message = "Created and inserted question to database." });
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Created and inserted question to database." });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
         }
 
@@ -108,11 +108,11 @@ namespace Quizzer.Controllers
                 var result = context.Questions.ToList().Single(q => q.Id.ToString() == id);
                 context.Questions.Remove(result);
                 context.SaveChanges();
-                return new OkObjectResult(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully removed question from database"});
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully removed question from database"});
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
         }
 
@@ -136,11 +136,11 @@ namespace Quizzer.Controllers
                 context.Questions.Update(question);
                 context.SaveChanges();
 
-                return new OkObjectResult(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully updated question in database" });
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully updated question in database" });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
         }
 
@@ -153,13 +153,13 @@ namespace Quizzer.Controllers
             {
                 var result = context.Answers.ToList().Single(a => a.Id.ToString() == id);
                 if (result.IsCorrect)
-                    return new JsonResult(new { IsCorrect = result.IsCorrect, CorrectAnswer = result.Id });
+                    return Ok(new { IsCorrect = result.IsCorrect, CorrectAnswer = result.Id });
 
-                return new JsonResult(new { IsCorrect = result.IsCorrect, CorrectAnswer = context.Answers.Single(a => a.QuestionId == result.QuestionId && a.IsCorrect).Id });
+                return Ok(new { IsCorrect = result.IsCorrect, CorrectAnswer = context.Answers.Single(a => a.QuestionId == result.QuestionId && a.IsCorrect).Id });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
+                return BadRequest(new { Success = false, StatusCode = 400, Error = "Bad Request", Message = ex.Message });
             }
             
         }
@@ -169,7 +169,7 @@ namespace Quizzer.Controllers
         public async Task<IActionResult> SeedDb()
         {
             Seed.SeedDb(context, userManager);
-            return Ok("Seeded database");
+            return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully removed question from database" });
         }
     }
 }

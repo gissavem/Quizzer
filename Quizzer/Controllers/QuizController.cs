@@ -45,7 +45,6 @@ namespace Quizzer.Controllers
             }         
         }
 
-        [Authorize]
         [HttpGet]
         [Route("api/questions")]
         public async Task<IActionResult> GetAllQuestions()

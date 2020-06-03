@@ -75,5 +75,14 @@ namespace Quizzer
                 description = "User created"
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> IsAdmin()
+        {
+            if (User.IsInRole("Admin"))
+                return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "User is in role" });
+
+            return Ok(new { Success = false, StatusCode = 200, Error = "", Message = "User is not in role" });
+        }
     }
 }

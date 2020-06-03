@@ -5,6 +5,7 @@ import { createBrowserHistory } from 'history';
 import {handleResponse} from "./handle-response";
 
 const currentUserSubject = new BehaviorSubject(getCookie('XSRF-REQUEST-TOKEN'));
+const userIsAdminSubject = new BehaviorSubject(false);
 
 export const history = createBrowserHistory();
 
@@ -12,9 +13,21 @@ export const authenticationService = {
     login,
     logout,
     getCookie,
+    isAdmin,
     currentUser: currentUserSubject.asObservable(),
+    userIsAdmin: userIsAdminSubject.asObservable(),
+
+    get userIsAdminValue() { return this.userIsAdminSubject.value },
     get currentUserValue() { return currentUserSubject.value }
 };
+
+async function isAdmin(){
+    await fetch("account/IsAdmin")
+        .then(handleResponse)
+        .then(Response => {
+            return Response.success;
+        });
+}
 
 function getCookie(cname) {
     let name = cname + "=";
@@ -44,7 +57,7 @@ function login(email, password) {
     return fetch("account/login", fetchConfig)
         .then(handleResponse)
         .then(user => {
-            
+            userIsAdminSubject.next(isAdmin());
             currentUserSubject.next(getCookie('XSRF-REQUEST-TOKEN'));
             return user;
         });

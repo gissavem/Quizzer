@@ -13,12 +13,15 @@ export class NavMenu extends Component {
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       collapsed: true,
-      currentUser : null
+      currentUser : null,
+      isAdmin : false
     };
   }
 
   componentDidMount() {
     authenticationService.currentUser.subscribe(x => this.setState({ currentUser: x }));
+    authenticationService.userIsAdmin.subscribe(x => this.setState({ isAdmin : x }));
+    this.setState({isAdmin : authenticationService.isAdmin()});
   }
 
   logout() {
@@ -57,9 +60,11 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-white" to="/">Home</NavLink>
                 </NavItem>
-                <NavItem>
-                    <NavLink tag={Link} className="text-white" to="/appconfig">Admin</NavLink>
-                  </NavItem>
+                  {this.state.isAdmin &&
+                    <NavItem>
+                      <NavLink tag={Link} className="text-white" to="/appconfig">Admin</NavLink>
+                    </NavItem>
+                  }
               </ul>
             </Collapse>
           </Container>

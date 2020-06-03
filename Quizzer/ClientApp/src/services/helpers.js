@@ -1,11 +1,9 @@
 ﻿import { BehaviorSubject } from 'rxjs';
 import { createBrowserHistory } from 'history';
-
-
 import {handleResponse} from "./handle-response";
 
 const currentUserSubject = new BehaviorSubject(getCookie('XSRF-REQUEST-TOKEN'));
-const userIsAdminSubject = new BehaviorSubject(false);
+const userIsAdminSubject = new BehaviorSubject(isAdmin());
 
 export const history = createBrowserHistory();
 
@@ -17,7 +15,7 @@ export const authenticationService = {
     currentUser: currentUserSubject.asObservable(),
     userIsAdmin: userIsAdminSubject.asObservable(),
 
-    get userIsAdminValue() { return this.userIsAdminSubject.value },
+    get userIsAdminValue() { return userIsAdminSubject.value },
     get currentUserValue() { return currentUserSubject.value }
 };
 
@@ -25,7 +23,7 @@ async function isAdmin(){
     await fetch("account/IsAdmin")
         .then(handleResponse)
         .then(Response => {
-            return Response.success;
+            userIsAdminSubject.next(Response.success);
         });
 }
 
@@ -57,7 +55,7 @@ function login(email, password) {
     return fetch("account/login", fetchConfig)
         .then(handleResponse)
         .then(user => {
-            userIsAdminSubject.next(isAdmin());
+            isAdmin();
             currentUserSubject.next(getCookie('XSRF-REQUEST-TOKEN'));
             return user;
         });
@@ -79,14 +77,14 @@ function logout() {
         .then(handleResponse)
         .then(user => {
             document.cookie.split(";")
-                
-                .forEach(function(c) 
-                { 
-                    document.cookie = c
-                        .replace(/^ +/, "")
-                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-                });
-
+            .forEach(function(c) 
+            { 
+                document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            userIsAdminSubject.next(false);
             currentUserSubject.next(null);
         })
         .catch(error => console.log(error));

@@ -44,8 +44,7 @@ export class QuestionCreator extends Component {
                     <Formik
                         enableReinitialize = {
                             true
-                        }
-                        
+                        }                     
                         initialValues=
                         {
                             {

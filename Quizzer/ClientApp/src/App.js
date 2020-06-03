@@ -25,7 +25,7 @@ export default class App extends Component {
   render () {
       return (
         <Router history={history}>         
-            <Layout className="reactBody">
+            <Layout>
               <Route exact path='/' component={Home} />
               <Route path='/register' component={Register} />         
               <Route path='/login' component={Login} />

@@ -1,5 +1,4 @@
-﻿
-export function handleResponse(response) 
+﻿export function handleResponse(response) 
 {
     return response.text()
         .then((text) => 

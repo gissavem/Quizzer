@@ -132,7 +132,6 @@ export class AppConfig extends Component {
     editQuestion(question){
         this.setState({questionToEdit : question});
     }
-
     
     removeQuestion(questionId){    
         this.setState({loading : true});

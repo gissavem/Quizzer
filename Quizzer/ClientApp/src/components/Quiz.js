@@ -72,7 +72,7 @@ export class Quiz extends Component {
                     <Button id="nextQuestion" color="info" disabled={!this.state.answered} onClick={() => this.nextQuestion()}>Next Question</Button>
                 </div>              
             </div>
-            );
+        );
     }
 
     async loadQuestions(difficulty) {
@@ -102,7 +102,6 @@ export class Quiz extends Component {
             div.classList.add('bg-danger');
             document.getElementById(clickResponse.correctAnswer).classList.remove('bg-info');
             document.getElementById(clickResponse.correctAnswer).classList.add('bg-success');
-
         }
         this.setState({answered : true}); 
     }

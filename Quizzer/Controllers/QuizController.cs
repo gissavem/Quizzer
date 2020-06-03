@@ -165,7 +165,7 @@ namespace Quizzer.Controllers
 
         [HttpGet]
         [Route("api/seedDb")]
-        public async Task<IActionResult> SeedDb()
+        public IActionResult SeedDb()
         {
             Seed.SeedDb(context, userManager);
             return Ok(new { Success = true, StatusCode = 200, Error = "", Message = "Successfully seeded database" });

@@ -40,7 +40,6 @@ export class Highscore extends Component {
         this.renderHighScore = this.renderHighScore.bind(this);
         this.onScoreSortChange = this.onScoreSortChange.bind(this);
         this.onDateSortChange = this.onDateSortChange.bind(this);
-        
     }
 
     onScoreSortChange = () => {
@@ -51,7 +50,6 @@ export class Highscore extends Component {
         else if (currentSort === 'scoreUp') nextSort = 'default';
         else if (currentSort === 'default') nextSort = 'scoreDown';
         else  nextSort = 'default';
-
 
         this.setState({
             currentSort: nextSort
@@ -76,7 +74,6 @@ export class Highscore extends Component {
         this.loadHighscores();
     }
     
-
     loadHighscores() {
         let XSRF = authenticationService.getCookie('XSRF-REQUEST-TOKEN');
         let fetchConfig =
